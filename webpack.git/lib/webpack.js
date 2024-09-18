@@ -63,23 +63,33 @@ const createMultiCompiler = (childOptions, options) => {
  * @returns {Compiler} a compiler
  */
 const createCompiler = (rawOptions, compilerIndex) => {
+	// 1、参数处理。normalized规范化；设置默认参数
 	// 对参数格式进行了处理，参数处理统一收敛到了这里，是一个好的设计
+	console.log("lbp 68 getNormalizedWebpackOptions 处理前", rawOptions);
 	const options = getNormalizedWebpackOptions(rawOptions);
+	console.log("lbp 69 getNormalizedWebpackOptions 处理后", options);
 	// 设置一些默认参数
 	applyWebpackOptionsBaseDefaults(options);
+
+	// 2、创建Compiler实例
 	const compiler = new Compiler(
 		/** @type {string} */ (options.context),
 		options
 	);
+	// 3、设置node环境插件，挂载到compiler实例上面。
+	// 插件：console、文件输入系统、文件输出系统、文件监听系统、
 	new NodeEnvironmentPlugin({
 		infrastructureLogging: options.infrastructureLogging
 	}).apply(compiler);
+	// 4、注册所有插件
 	if (Array.isArray(options.plugins)) {
 		for (const plugin of options.plugins) {
+			// webpack的插件可以是一个函数或者实例对象
 			if (typeof plugin === "function") {
 				/** @type {WebpackPluginFunction} */
 				(plugin).call(compiler, compiler);
 			} else if (plugin) {
+				// webpack 的插件在设置的时，类似 new Plugin()。所以此处是一个实例对象
 				plugin.apply(compiler);
 			}
 		}
@@ -91,9 +101,12 @@ const createCompiler = (rawOptions, compilerIndex) => {
 	if (resolvedDefaultOptions.platform) {
 		compiler.platform = resolvedDefaultOptions.platform;
 	}
+	// 5、调用钩子函数，environment、afterEnvironment
 	compiler.hooks.environment.call();
 	compiler.hooks.afterEnvironment.call();
+	// 6、把一些webpack配置转换为插件的形式注入
 	new WebpackOptionsApply().process(options, compiler);
+	// 7、调用钩子函数。initialize
 	compiler.hooks.initialize.call();
 	return compiler;
 };
@@ -123,7 +136,7 @@ const asArray = options =>
 const webpack = /** @type {WebpackFunctionSingle & WebpackFunctionMulti} */ (
 	/**
 	 * @param {WebpackOptions | (ReadonlyArray<WebpackOptions> & MultiCompilerOptions)} options options
-	 * @param {Callback<Stats> & Callback<MultiStats>=} callback callback
+	 * @param {Callback<Stats> & Callback<MultiStats>=} callback callback 非必填函数，如果传了callback，会自动调用。如果没有传需要调用compiler.run 运行
 	 * @returns {Compiler | MultiCompiler | null} Compiler or MultiCompiler
 	 */
 	(options, callback) => {

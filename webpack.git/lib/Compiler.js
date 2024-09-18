@@ -142,6 +142,7 @@ class Compiler {
 	 * @param {WebpackOptions} options options
 	 */
 	constructor(context, options = /** @type {WebpackOptions} */ ({})) {
+		// webpack的各种钩子函数
 		this.hooks = Object.freeze({
 			/** @type {SyncHook<[]>} */
 			initialize: new SyncHook([]),
