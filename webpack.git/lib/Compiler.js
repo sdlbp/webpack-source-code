@@ -482,6 +482,7 @@ class Compiler {
 		/** @type {Logger | undefined} */
 		let logger;
 
+		// 1、定义错误回调
 		/**
 		 * @param {Error | null} err error
 		 * @param {Stats=} stats stats
@@ -504,6 +505,7 @@ class Compiler {
 
 		this.running = true;
 
+		// 2、定义编译结束回调
 		/**
 		 * @param {Error | null} err error
 		 * @param {Compilation=} _compilation compilation
@@ -583,6 +585,7 @@ class Compiler {
 			});
 		};
 
+		// 3、定义run方法
 		const run = () => {
 			this.hooks.beforeRun.callAsync(this, err => {
 				if (err) return finalCallback(err);
@@ -599,6 +602,7 @@ class Compiler {
 			});
 		};
 
+		// 4、调用run方法
 		if (this.idle) {
 			this.cache.endIdle(err => {
 				if (err) return finalCallback(err);
@@ -1321,6 +1325,7 @@ ${other}`);
 			const logger = compilation.getLogger("webpack.Compiler");
 
 			logger.time("make hook");
+			// TODO 钩子 make，这个钩子里面就是真正使用 compilation 执行编译的
 			this.hooks.make.callAsync(compilation, err => {
 				logger.timeEnd("make hook");
 				if (err) return callback(err);

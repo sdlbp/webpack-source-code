@@ -1,5 +1,6 @@
 const path = require('path')
-
+const {hooklog}  = require('../plugins/hooklog/index')
+const {hookoptions}  = require('../plugins/hookoptions/index')
 module.exports = {
   entry: './src/index.js',
   context: path.resolve(__dirname, "."),
@@ -17,5 +18,8 @@ module.exports = {
     //   }
     // ]
   },
-  plugins: []
+  plugins: [
+    // hooklog,
+    // hookoptions
+  ]
 }

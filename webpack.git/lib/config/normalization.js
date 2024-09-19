@@ -179,6 +179,8 @@ const getNormalizedWebpackOptions = config => ({
 		return { ...devServer };
 	}),
 	devtool: config.devtool,
+	// 入口处理
+	//
 	entry:
 		config.entry === undefined
 			? { main: {} }

@@ -65,9 +65,9 @@ const createMultiCompiler = (childOptions, options) => {
 const createCompiler = (rawOptions, compilerIndex) => {
 	// 1、参数处理。normalized规范化；设置默认参数
 	// 对参数格式进行了处理，参数处理统一收敛到了这里，是一个好的设计
-	console.log("lbp 68 getNormalizedWebpackOptions 处理前", rawOptions);
+	// console.log("lbp 68 getNormalizedWebpackOptions 处理前", rawOptions);
 	const options = getNormalizedWebpackOptions(rawOptions);
-	console.log("lbp 69 getNormalizedWebpackOptions 处理后", options);
+	// console.log("lbp 69 getNormalizedWebpackOptions 处理后", options);
 	// 设置一些默认参数
 	applyWebpackOptionsBaseDefaults(options);
 
@@ -89,7 +89,8 @@ const createCompiler = (rawOptions, compilerIndex) => {
 				/** @type {WebpackPluginFunction} */
 				(plugin).call(compiler, compiler);
 			} else if (plugin) {
-				// webpack 的插件在设置的时，类似 new Plugin()。所以此处是一个实例对象
+				// webpack 的插件在设置的时，类似 new Plugin()
+				// 所以此处是一个实例对象
 				plugin.apply(compiler);
 			}
 		}

@@ -9,7 +9,7 @@
 /** @typedef {import("../declarations/WebpackOptions").EntryNormalized} Entry */
 /** @typedef {import("./Compiler")} Compiler */
 /** @typedef {import("./Entrypoint").EntryOptions} EntryOptions */
-
+// 处理入口的差劲
 class EntryOptionPlugin {
 	/**
 	 * @param {Compiler} compiler the compiler instance one is tapping into
@@ -17,6 +17,7 @@ class EntryOptionPlugin {
 	 */
 	apply(compiler) {
 		compiler.hooks.entryOption.tap("EntryOptionPlugin", (context, entry) => {
+			console.log("lbp 20 入口插件", context, entry);
 			EntryOptionPlugin.applyEntryOption(compiler, context, entry);
 			return true;
 		});
