@@ -472,6 +472,8 @@ const getNormalizedWebpackOptions = config => ({
 });
 
 /**
+ * webpack 的入口函数处理
+ * 支持字符串、数组、对象描述
  * @param {EntryStatic} entry static entry options
  * @returns {EntryStaticNormalized} normalized static entry options
  */

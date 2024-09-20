@@ -81,16 +81,15 @@ const createCompiler = (rawOptions, compilerIndex) => {
 	new NodeEnvironmentPlugin({
 		infrastructureLogging: options.infrastructureLogging
 	}).apply(compiler);
-	// 4、注册所有插件
+	// 4、注册所有插件。函数与类组件仅仅只是挂载方式的区别
 	if (Array.isArray(options.plugins)) {
 		for (const plugin of options.plugins) {
-			// webpack的插件可以是一个函数或者实例对象
+			// webpack的插件可以是一个函数或者实例对象，两种不同形式的插件仅仅是挂载方式的不同
 			if (typeof plugin === "function") {
 				/** @type {WebpackPluginFunction} */
 				(plugin).call(compiler, compiler);
 			} else if (plugin) {
-				// webpack 的插件在设置的时，类似 new Plugin()
-				// 所以此处是一个实例对象
+				// webpack 的插件在设置的时，类似 new Plugin()，因此此处是一个实例对象
 				plugin.apply(compiler);
 			}
 		}
@@ -142,7 +141,9 @@ const webpack = /** @type {WebpackFunctionSingle & WebpackFunctionMulti} */ (
 	 */
 	(options, callback) => {
 		const create = () => {
-			// TODO 可能是做参数校验？？
+			// 使用json scheme 做参数校验
+			// 对参数进行验证（核心是json scheme）
+			// 首先进行预编译检查，如果预编译检查没有通过进行真正的scheme校验。如果真正的scheme校验通过，提示可能存在bug
 			if (!asArray(options).every(webpackOptionsSchemaCheck)) {
 				getValidateSchema()(webpackOptionsSchema, options);
 				util.deprecate(

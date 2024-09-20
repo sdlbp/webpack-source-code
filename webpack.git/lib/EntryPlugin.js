@@ -6,7 +6,7 @@
 "use strict";
 
 const EntryDependency = require("./dependencies/EntryDependency");
-
+// 入口的实际处理插件
 /** @typedef {import("./Compiler")} Compiler */
 /** @typedef {import("./Entrypoint").EntryOptions} EntryOptions */
 
@@ -40,8 +40,30 @@ class EntryPlugin {
 		);
 
 		const { entry, options, context } = this;
+		// 处理入口的依赖
+		/**
+		 * {
+		 * _parentModule: undefined,
+		 * _parentDependenciesBlock: undefined,
+		 * _parentDependenciesBlockIndex: -1,
+		 * weak: false,
+		 * optional: false,
+		 * _locSL: 0,
+		 * _locSC: 0,
+		 * _locEL: 0,
+		 * _locEC: 0,
+		 * _locI: undefined,
+		 * _locN: 'main',
+		 * _loc: { name: 'main' },
+		 * request: './src/index.js',
+		 * userRequest: './src/index.js',
+		 * range: undefined,
+		 * assertions: undefined,
+		 * _context: undefined
+		 * }
+		 */
 		const dep = EntryPlugin.createDependency(entry, options);
-
+		// console.log("lbp 44 apply", dep);
 		compiler.hooks.make.tapAsync("EntryPlugin", (compilation, callback) => {
 			compilation.addEntry(context, dep, options, err => {
 				callback(err);
